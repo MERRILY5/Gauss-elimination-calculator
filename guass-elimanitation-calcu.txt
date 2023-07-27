@@ -1,0 +1,59 @@
+import numpy as np
+
+def design():
+    print("\t"+"_"*50,"\n\n\tGAUSS ELIMINATION CALCULATOR FOR TRAFFIC ANALYSIS\n","\t"+"_"*50)
+    print("~"*30,"\n Done By: J.Merwin IT-C\n G.K.Prashanth Arjun IT-C\n"+"~"*30)
+
+def operation():
+    n=int(input("\nEnter the unknowns: "))
+    
+    # To get the matrix from the user
+    m1=[]
+    for i in range(n):
+        m=[]
+        for j in range(n):
+            c=int(input(f"Enter the numbers of index {i,j}: "))
+            m.append(c)
+        m1.append(m)
+    A=np.array(m1)
+    print("\nThe matrix which you have given is:\n",A,"\n")
+
+    # To get the unknown products from the user
+    m2=[]
+    for i in range(n):
+        a=int(input(f"Enter the product of the unknowns {i+1}: "))
+        m2.append(a)
+    b=np.array(m2)
+    print("\nThe given product is:\n",b,"\n")
+    
+    # Perform row operations to reduce matrix to row echelon form
+    for i in range(len(A)):
+        mat=A[i][i]
+        for j in range(i+1,len(A)):
+            factor=A[j][i]//mat
+            A[j]-=factor*A[i]
+            b[j]-=factor*b[i]
+        
+    # Solve for traffic flow variables using back substitution
+    x = np.zeros(len(A))
+    for i in range(len(A)-1, -1, -1):
+        x[i]=(b[i]-np.dot(A[i][i+1:],x[i+1:]))/A[i][i]
+    print(x[i])
+
+    # Print the traffic flow variables
+    for i in range(len(x)):
+        print(f"Traffic flow from node {i+0} to node {i+1}: {x[i]:.2f} vehicles per hour")
+
+design()
+operation()
+
+#Looping again
+X=True
+while(X):
+    again=str(input("\nDo you want to continue(y/n): ")).lower()
+    if again=="n":
+        X=False
+        print("_"*30,"\n\nThank you\n","_"*30)
+    else:
+        print("_"*50)
+        operation()
